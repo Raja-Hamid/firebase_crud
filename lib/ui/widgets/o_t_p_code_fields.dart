@@ -28,10 +28,10 @@ class OTPCodeFields extends StatelessWidget {
         SizedBox(height: 8.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(5, (index) {
+          children: List.generate(6, (index) {
             return SizedBox(
-              width: 60.w,
-              height: 60.h,
+              width: 55.w,
+              height: 55.h,
               child: TextField(
                 controller: controllers[index],
                 textAlign: TextAlign.center,
@@ -54,9 +54,14 @@ class OTPCodeFields extends StatelessWidget {
                   ),
                 ),
                 onChanged: (value) {
-                  if (value.isNotEmpty && index < 4) {
+                  if (value.isNotEmpty && !RegExp(r'^\d$').hasMatch(value)) {
+                    controllers[index].clear();
+                    return;
+                  }
+                  if (value.isNotEmpty && index < 5) {
                     FocusScope.of(context).nextFocus();
-                  } else if (value.isEmpty && index > 0) {
+                  }
+                  if (value.isEmpty && index > 0) {
                     FocusScope.of(context).previousFocus();
                   }
                 },

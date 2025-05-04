@@ -123,6 +123,13 @@ class AuthController extends GetxController {
         codeSent: (String verificationID, int? resendToken) {
           _verificationID = verificationID;
           hideLoadingDialog();
+          Get.snackbar(
+            'OTP Sent!',
+            'A verification code has been sent to $phoneNumber.',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
           Get.find<PageNavigationController>().nextPage();
         },
         codeAutoRetrievalTimeout: (String verificationID) {
@@ -175,14 +182,16 @@ class AuthController extends GetxController {
   Future<void> finishPhoneSignUp({
     required String firstName,
     required String lastName,
+    required String dateOfBirth,
     required String password,
   }) async {
     try {
+      showLoadingDialog();
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not signed in');
-
       final userDoc = await _firestore.collection('users').doc(user.uid).get();
       if (userDoc.exists) {
+        hideLoadingDialog();
         Get.snackbar(
           'User Already Exists',
           'This phone number is already linked to another account.',
@@ -192,14 +201,15 @@ class AuthController extends GetxController {
         );
         return;
       }
-
       await user.updatePassword(password);
       await _firestore.collection('users').doc(user.uid).set({
         'firstName': firstName,
         'lastName': lastName,
         'phoneNumber': user.phoneNumber,
+        'dateOfBirth': dateOfBirth,
         'createdAt': FieldValue.serverTimestamp(),
       });
+      hideLoadingDialog();
       Get.snackbar(
         'Sign Up Successful',
         'Your account has been created!',
@@ -208,8 +218,10 @@ class AuthController extends GetxController {
         colorText: Colors.white,
       );
     } on FirebaseAuthException catch (e) {
+      hideLoadingDialog();
       _handleAuthErrors(e);
     } catch (e) {
+      hideLoadingDialog();
       Get.snackbar(
         'Sign Up Failed!',
         e.toString(),

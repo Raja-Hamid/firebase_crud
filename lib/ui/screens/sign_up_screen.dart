@@ -1,6 +1,5 @@
 import 'package:firebase_crud/controllers/routes/app_routes.dart';
 import 'package:firebase_crud/ui/screens/sign_up_with_phone_number_screens.dart';
-import 'package:firebase_crud/ui/screens/test_o_t_p.dart';
 import 'package:firebase_crud/ui/widgets/custom_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_crud/constants/colors.dart';

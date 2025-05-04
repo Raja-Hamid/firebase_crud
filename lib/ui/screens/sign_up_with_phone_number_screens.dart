@@ -26,12 +26,14 @@ class _SignUpWithPhoneNumberScreensState
   final _otpFormKey = GlobalKey<FormState>();
   final _profileFormKey = GlobalKey<FormState>();
   final _passwordFormKey = GlobalKey<FormState>();
+
   final TextEditingController _phoneNumberController = TextEditingController();
   final _otpController = List.generate(6, (_) => TextEditingController());
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
+
   final _controller = Get.put(PageNavigationController());
   final AuthController _authController = Get.find<AuthController>();
 
@@ -115,61 +117,82 @@ class _SignUpWithPhoneNumberScreensState
   }
 
   Widget _buildPhoneInputPage() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      children: [
-        RoundedTextField(
-          controller: _phoneNumberController,
-          title: 'Phone Number',
-          hintText: 'Enter phone number',
-          titleColor: Colors.white,
-          textColor: Colors.white,
-          hintColor: Colors.grey,
-          borderColor: Colors.white,
-        ),
-        SizedBox(height: 30.h),
-        RoundedButton(
-          title: 'Continue',
-          backgroundColor: Colors.orange,
-          textColor: Colors.black,
-          onPressed: () {
-            // _authController.signUpWithPhoneNumber(
-            //   phoneNumber: _phoneNumberController.text.trim(),
-            // );
-            _controller.nextPage();
-          },
-        ),
-      ],
+    return Form(
+      key: _phoneFormKey,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          RoundedTextField(
+            controller: _phoneNumberController,
+            title: 'Phone Number',
+            hintText: 'Enter phone number',
+            titleColor: Colors.white,
+            textColor: Colors.white,
+            hintColor: Colors.grey,
+            borderColor: Colors.white,
+            keyboardType: TextInputType.phone,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Phone number is required';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 30.h),
+          RoundedButton(
+            title: 'Continue',
+            backgroundColor: Colors.orange,
+            textColor: Colors.black,
+            onPressed: () {
+              _authController.signUpWithPhoneNumber(
+                phoneNumber: _phoneNumberController.text.trim(),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildOTPVerificationPage() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      children: [
-        SizedBox(height: 30.h),
-        Icon(Icons.sms_rounded, color: Colors.orange, size: 80.sp),
-        SizedBox(height: 30.h),
-        OTPCodeFields(title: 'Code', controllers: _otpController),
-        SizedBox(height: 30.h),
-        RoundedButton(
-          title: 'Verify',
-          backgroundColor: Colors.orange,
-          textColor: Colors.black,
-          onPressed: () {
-            // final code = _otpControllers.map((c) => c.text).join();
-            // _controller.verifyOTP(code);
-            _controller.nextPage();
-          },
-        ),
-        TextButton(
-          onPressed: _controller.previousPage,
-          child: Text(
-            'Go Back',
-            style: TextStyle(color: Colors.white, fontSize: 16.sp),
+    return Form(
+      key: _otpFormKey,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          SizedBox(height: 30.h),
+          Icon(Icons.sms_rounded, color: Colors.orange, size: 80.sp),
+          SizedBox(height: 20.h),
+          Text(
+            'Enter the 6-digit code sent to your\nphone number.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+          SizedBox(height: 25.h),
+          OTPCodeFields(title: 'Code', controllers: _otpController),
+          SizedBox(height: 30.h),
+          RoundedButton(
+            title: 'Verify',
+            backgroundColor: Colors.orange,
+            textColor: Colors.black,
+            onPressed: () {
+              final code = _otpController.map((c) => c.text).join();
+              _authController.verifyOTP(code);
+            },
+          ),
+          TextButton(
+            onPressed: _controller.previousPage,
+            child: Text(
+              'Go Back',
+              style: TextStyle(color: Colors.white, fontSize: 16.sp),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -194,7 +217,14 @@ class _SignUpWithPhoneNumberScreensState
       formKey: _passwordFormKey,
       passwordController: _passwordController,
       onContinue: () {
-        if (_passwordFormKey.currentState!.validate()) {}
+        if (_passwordFormKey.currentState!.validate()) {
+          _authController.finishPhoneSignUp(
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            password: _passwordController.text.trim(),
+            dateOfBirth: _dobController.text.trim(),
+          );
+        }
       },
       onGoBack: _controller.previousPage,
     );
