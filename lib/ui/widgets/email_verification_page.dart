@@ -24,43 +24,24 @@ class EmailVerificationPage extends StatefulWidget {
 
 class _EmailVerificationPageState extends State<EmailVerificationPage> {
   RxBool isVerified = false.obs;
-  Timer? _timer;
   Timer? _deletionTimer;
 
   @override
   void initState() {
     super.initState();
-    _checkEmailVerificationStatus();
-    _startPeriodicCheck();
     _deletionCountdown();
-  }
-
-  void _startPeriodicCheck() {
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      _checkEmailVerificationStatus();
-    });
   }
 
   void _deletionCountdown() {
     _deletionTimer = Timer(const Duration(seconds: 25), () {
       widget.authController.deleteAccount();
-      _timer?.cancel();
     });
-  }
-
-  Future<void> _checkEmailVerificationStatus() async {
-    bool verified = await widget.authController.checkEmailVerificationStatus();
-    if (verified) {
-      _timer?.cancel();
-      widget.authController.deleteAccount();
-    }
-    isVerified.value = verified;
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     _deletionTimer?.cancel();
+    widget.authController.resetEmailVerification();
     super.dispose();
   }
 
@@ -79,17 +60,12 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         ),
         SizedBox(height: 30.h),
         Obx(() {
-          final verified = isVerified.value;
+          final verified = widget.authController.isEmailVerified.value;
           return RoundedButton(
             title: 'Continue',
             backgroundColor: verified ? Colors.orange : Colors.grey,
             textColor: Colors.black,
-            onPressed:
-                verified
-                    ? () {
-                      widget.onContinue();
-                    }
-                    : () {},
+            onPressed: verified ? widget.onContinue : () {},
           );
         }),
         TextButton(

@@ -1,4 +1,5 @@
 import 'package:firebase_crud/constants/colors.dart';
+import 'package:firebase_crud/constants/validators.dart';
 import 'package:firebase_crud/controllers/auth/auth_controller.dart';
 import 'package:firebase_crud/controllers/page_controllers/page_navigation_controller.dart';
 import 'package:firebase_crud/ui/widgets/carousel_indicator.dart';
@@ -135,6 +136,10 @@ class _SignUpWithPhoneNumberScreensState
               if (value == null || value.isEmpty) {
                 return 'Phone number is required';
               }
+              final regExp = RegExp(kPhoneRegex);
+              if (!regExp.hasMatch(value.trim())) {
+                return 'Enter a valid phone number (e.g. +923001234567)';
+              }
               return null;
             },
           ),
@@ -144,9 +149,11 @@ class _SignUpWithPhoneNumberScreensState
             backgroundColor: Colors.orange,
             textColor: Colors.black,
             onPressed: () {
-              _authController.signUpWithPhoneNumber(
-                phoneNumber: _phoneNumberController.text.trim(),
-              );
+              if (_phoneFormKey.currentState!.validate()) {
+                _authController.sendPhoneOTP(
+                  phoneNumber: _phoneNumberController.text.trim(),
+                );
+              }
             },
           ),
         ],
@@ -167,7 +174,7 @@ class _SignUpWithPhoneNumberScreensState
             'Enter the 6-digit code sent to your\nphone number.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withAlpha((0.9 * 255).round()),
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
             ),

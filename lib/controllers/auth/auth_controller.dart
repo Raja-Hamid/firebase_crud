@@ -17,10 +17,20 @@ class AuthController extends GetxController {
   String? _verificationID;
   String? get verificationID => _verificationID;
 
+  final RxBool isEmailVerified = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     _user.bindStream(_auth.userChanges());
+  }
+
+  void markEmailAsVerified() {
+    isEmailVerified.value = true;
+  }
+
+  void resetEmailVerification() {
+    isEmailVerified.value = false;
   }
 
   void showLoadingDialog() {
@@ -100,7 +110,7 @@ class AuthController extends GetxController {
   }
 
   // SIGN UP WITH PHONE NUMBER
-  Future<void> signUpWithPhoneNumber({required String phoneNumber}) async {
+  Future<void> sendPhoneOTP({required String phoneNumber}) async {
     try {
       showLoadingDialog();
       await _auth.verifyPhoneNumber(
