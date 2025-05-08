@@ -282,6 +282,7 @@ class AuthController extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      Get.offAllNamed(AppRoutes.welcomeScreen);
     } on FirebaseAuthException catch (e) {
       _handleAuthErrors(e);
     } catch (e) {

@@ -29,72 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _showEditDialog(DocumentSnapshot doc) async {
-    final TextEditingController nameController = TextEditingController(
-      text: doc['name'] ?? '',
-    );
-
-    await showDialog(
-      context: context,
-      builder:
-          (_) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text('Edit User'),
-            content: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  users.doc(doc.id).update({'name': nameController.text});
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-    );
-  }
-
-  Future<void> _showAddUserDialog() async {
-    final TextEditingController nameController = TextEditingController();
-
-    await showDialog(
-      context: context,
-      builder:
-          (_) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text('Add User'),
-            content: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  users.add({'name': nameController.text});
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Add'),
-              ),
-            ],
-          ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,6 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 20.sp,
           ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 15.w),
+            child: GestureDetector(
+              child: const Icon(Icons.logout, color: Colors.white),
+              onTap: () => _authController.signOut(),
+            ),
+          ),
+        ],
         centerTitle: true,
         toolbarHeight: kToolbarHeight,
       ),
@@ -196,6 +139,72 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.black),
       ),
+    );
+  }
+
+  Future<void> _showEditDialog(DocumentSnapshot doc) async {
+    final TextEditingController nameController = TextEditingController(
+      text: doc['name'] ?? '',
+    );
+
+    await showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text('Edit User'),
+            content: TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  users.doc(doc.id).update({'name': nameController.text});
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  Future<void> _showAddUserDialog() async {
+    final TextEditingController nameController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text('Add User'),
+            content: TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  users.add({'name': nameController.text});
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Add'),
+              ),
+            ],
+          ),
     );
   }
 }
