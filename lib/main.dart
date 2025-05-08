@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.welcomeScreen,
+        initialRoute: AppRoutes.splashScreen,
         getPages: AppRoutes.routes,
       ),
     );

@@ -35,6 +35,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   void _deletionCountdown() {
     _deletionTimer = Timer(const Duration(seconds: 25), () {
       widget.authController.deleteAccount();
+      widget.authController.resetEmailVerification();
     });
   }
 

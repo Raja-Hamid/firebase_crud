@@ -255,7 +255,7 @@ class AuthController extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      Get.toNamed(AppRoutes.homeScreen);
+      Get.offAllNamed(AppRoutes.homeScreen);
     } on FirebaseAuthException catch (e) {
       hideLoadingDialog();
       _handleAuthErrors(e);
