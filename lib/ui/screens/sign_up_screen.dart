@@ -1,4 +1,4 @@
-import 'package:firebase_crud/controllers/routes/app_routes.dart';
+import 'package:firebase_crud/routes/app_routes.dart';
 import 'package:firebase_crud/ui/screens/sign_up_with_phone_number_screens.dart';
 import 'package:firebase_crud/ui/widgets/custom_footer.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:firebase_crud/controllers/routes/app_routes.dart';
+import 'package:firebase_crud/routes/app_routes.dart';
 import 'package:firebase_crud/ui/widgets/rounded_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

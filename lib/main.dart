@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crud/controllers/app_links/app_links_service.dart';
 import 'package:firebase_crud/controllers/auth/auth_controller.dart';
-import 'package:firebase_crud/controllers/routes/app_routes.dart';
+import 'package:firebase_crud/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

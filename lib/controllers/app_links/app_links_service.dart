@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crud/controllers/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_crud/controllers/routes/app_routes.dart';
+import 'package:firebase_crud/routes/app_routes.dart';
 
 class AppLinksService {
   static final AppLinks _appLinks = AppLinks();

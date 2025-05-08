@@ -1,7 +1,7 @@
 import 'package:firebase_crud/constants/colors.dart';
 import 'package:firebase_crud/constants/validators.dart';
 import 'package:firebase_crud/controllers/auth/auth_controller.dart';
-import 'package:firebase_crud/controllers/routes/app_routes.dart';
+import 'package:firebase_crud/routes/app_routes.dart';
 import 'package:firebase_crud/ui/widgets/custom_footer.dart';
 import 'package:firebase_crud/ui/widgets/rounded_button.dart';
 import 'package:firebase_crud/ui/widgets/rounded_text_field.dart';
